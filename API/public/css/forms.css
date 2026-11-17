@@ -1,0 +1,431 @@
+/* LOGIN */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "DM Sans", Arial, sans-serif;
+    background-color: #EEE7DC;
+}
+
+h1 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: lighter;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: #8b7659;
+}
+
+.container {
+    background-color: none;
+    display: flex;
+    width: 80%;
+    margin: auto;
+}
+
+.botoes-acao {
+    border: 1px solid #8b7659;
+    padding: 5px 25px 5px 25px;
+    border-radius: 5px;
+}
+
+.header {
+    height: 100px;
+    background-color: #100900;
+    backdrop-filter: blur(12px);
+}
+
+.header .container {
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.header .container .navbar a {
+    color: #f4d7ae;
+}
+
+.header a {
+    text-decoration: none;
+    color: #f4d7ae;
+}
+
+.navbar {
+    gap: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    color: #f4d7ae;
+    font-size: 11px;
+}
+
+.titulo {
+    color: #f4d7ae;
+    width: fit-content;
+}
+
+.header h1, .container h2 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    margin: 0;
+    font-weight: lighter;
+}
+
+
+.login {
+    background-image: url('../assets/imgs/bg-login.png');
+    background-size: cover;
+    background-position: center;
+    min-height: 629px;
+    box-sizing: border-box;
+    padding-bottom: 70px;
+}
+
+.login .container {
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    width: 50%;
+    background-color: #100900bf;
+    backdrop-filter: blur(12px);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #EEE7DC;
+    flex-direction: column;
+    height: fit-content;
+    padding: 20px 0;
+    margin-top: 70px;
+}
+
+.card h2 {
+    font-size: 30px;
+}
+
+.formulario {
+    display: flex;
+    width: 80%;
+    justify-content: center;
+}
+
+.formulario img {
+    height: 200px;
+    width: 270px;
+    margin-left: 110px;
+}
+
+.formulario span {
+    font-size: 15px;
+    font-weight: 800;
+}
+
+.formulario input {
+    border: 1px solid #8b7659;
+    text-align: center;
+    border-radius: 25px;
+    margin: 0;
+    color: #EEE7DC;
+}
+
+.formulario p, h2 {
+    display: flex;
+    justify-content: center;
+}
+
+.container input {
+    background-color: #100900bf;
+    backdrop-filter: blur(12px);
+}
+
+.formulario select {
+    border: 1px solid #8b7659;
+    color: gray;
+    height: 36px;
+    text-align: center;
+    border-radius: 10px;
+    margin: 0;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    padding: 5px 0;
+}
+
+.botao {
+    cursor: pointer;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    border: 0;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 18px;
+    color: #fff;
+    background-color: #8b7659;
+    width: 220px;
+    height: 40px;
+    align-self: center;
+    margin-top: 20px;
+}
+
+.loading-div {
+    width: 50px;
+    display: none;
+}
+
+.loading-div img {
+    height: 50px;
+    width: 50px;
+}
+
+#div_erros_login {
+    display: none
+}
+
+/* FOOTER */
+
+.footer {
+    background-color: #0b100d;
+    height: 150px;
+    color: #fff;
+    display: flex;
+    font-size: 15px;
+}
+
+.container a {
+    text-decoration: none;
+    color: #8b7659;
+    text-transform: uppercase;
+    font-size: 9px;
+}
+
+.footer .container {
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    border-bottom: 1px solid #8b7659;
+}
+
+.footer .container h1 {
+    color: #EEE7DC;
+}
+
+.footer .container p {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    color: #b4b8af;
+    font-style: italic;
+    font-size: 20px;
+    width: 20vw;
+    text-align: left;
+
+}
+
+.footer .container .version {
+    font-size: 12px;
+}
+
+
+/* FORMULARIO */
+
+.alerta_erro {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.card_erro {
+    display: none;
+    background-color: #fff;
+    color: black;
+    width: 230px;
+    position: fixed;
+    border-radius: 4px;
+    border: #ED145B 3px solid;
+    padding: 10px;
+    margin-right: 10%;
+}
+
+.card_erro #mensagem_erro {
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.formulario .tipo_campo {
+    font-size: 20px;
+    font-weight: 600 !important;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    margin-bottom: 10px;
+    border: 2px solid #32b9cd;
+    padding: 10px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.btn {
+    font-family: "Barlow", sans-serif;
+    border: 0;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 18px;
+    padding: 10px 15px;
+    color: white;
+    background-color: #ED145B;
+    width: 120px;
+    align-self: center;
+    margin-top: 5px;
+}
+
+.loading-div {
+    width: 50px;
+    margin: auto;
+    display: none;
+}
+
+.loading-div img {
+    height: 50px;
+    width: 50px;
+}
+
+/* CADASTRO */
+
+.card-cadastro {
+    width: 50%;
+    min-width: 320px;
+    max-width: 520px;
+}
+
+.card-cadastro p {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 15px 0;
+    color: #b4b8af;
+}
+
+.card-cadastro .formulario {
+    width: 80%;
+}
+
+.card-cadastro .campo span {
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 14px;
+    color: #EEE7DC;
+}
+
+.card-cadastro .formulario input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin-bottom: 8px;
+}
+
+.card-cadastro .formulario input::placeholder {
+    color: #b4b8af;
+    opacity: 0.7;
+}
+
+.card-cadastro .formulario input:focus {
+    outline: none;
+    border-color: #f4d7ae;
+}
+
+.card-cadastro .botao {
+    width: 100%;
+    max-width: 220px;
+}
+
+.card-cadastro .loading-div {
+    margin: 15px auto 0 auto;
+}
+
+/* SIMULADOR */
+
+.simulador {
+    color: white;
+}
+
+.simulador .container {
+    flex-direction: column;
+    overflow: scroll;
+    height: var(--tamanho-simulador);
+}
+
+
+
+/* ALERTA */
+
+#alerta {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.mensagem-alarme {
+    background-color: white;
+    border-radius: 5px;
+    width: 300px;
+    height: 80px;
+    margin: 10px;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.mensagem-alarme h3 {
+    font-size: 14px;
+    margin: 0;
+}
+
+.mensagem-alarme .informacao {
+    width: 66%;
+}
+
+.alarme-sino {
+    width: 48px;
+    height: 48px;
+    animation-name: bell;
+    animation-duration: 4s;
+    background-image: url('https://cdn-icons-png.flaticon.com/512/1157/1157000.png');
+    background-size: cover;
+    animation-iteration-count: infinite;
+}
+
+@keyframes bell {
+    0% {
+        transform: rotate(25deg)
+    }
+
+    25% {
+        transform: rotate(-25deg)
+    }
+
+    50% {
+        transform: rotate(25deg)
+    }
+
+    75% {
+        transform: rotate(-25deg)
+    }
+
+    100% {
+        transform: rotate(25deg)
+    }
+}

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Alma EnCanto | Cadastro</title>
+
+    <script src="./js/sessao.js"></script>
+
+    <link rel="stylesheet" href="./css/forms.css">
+    <link rel="icon" href="./assets/icon/favicon2.ico">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+</head>
+
+<body>
+
+    <!--Header-->
+
+    <div class="header">
+        <div class="container">
+            <h1 class="titulo">Alma EnCanto</h1>
+            <ul class="navbar">
+                <li>
+                    <a href="index.html">Inicial</a>
+                </li>
+                <li>|</li>
+                <li>
+                    <a href="login.html">Login</a>
+                </li>
+                <li class="agora">
+                    <a href="#">Cadastro</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="login cadastro">
+        <div class="alerta_erro">
+            <div class="card_erro" id="cardErro">
+                <span id="mensagem_erro"></span>
+            </div>
+        </div>
+        <div class="container">
+            <div class="card card-cadastro">
+                <h2>Bem-vindo!</h2>
+                <p>Crie sua conta para fazer parte</p>
+
+                <div class="formulario">
+                    <div class="campo">
+                        <span>Nome:</span>
+                        <input id="nome_input" type="text" placeholder="Seu nome">
+                    </div>
+                    <div class="campo">
+                        <span>E-mail:</span>
+                        <input id="email_input" type="text" placeholder="meuemail@provedor.com">
+                    </div>
+                    <div class="campo">
+                        <span>Senha:</span>
+                        <input id="senha_input" type="password" placeholder="******">
+                    </div>
+                    <div class="campo">
+                        <span>Confirmação da Senha:</span>
+                        <input id="confirmacao_senha_input" type="password" placeholder="******">
+                    </div>
+                    <button class="botao" onclick="cadastrar()">Cadastrar</button>
+                </div>
+
+                <div id="div_aguardar" class="loading-div">
+                    <img src="./assets/circle-loading.gif" id="loading-gif">
+                </div>
+
+                <div id="div_erros_login"></div>
+            </div>
+        </div>
+    </div>
+
+    <!--Footer-->
+
+    <div class="footer">
+        <div class="container">
+            <h1>Alma EnCanto</h1>
+            <p>Uma história sobre música, presença e os instantes que permanecem.</p>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+
+  // Array para armazenar empresas cadastradas para validação de código de ativação 
+  let listaEmpresasCadastradas = [];
+
+  // Confere a senha caractere por caractere e devolve um vetor
+  // com tudo o que ainda está faltando (vazio = senha forte)
+  function validarSenha(senha) {
+    var minusculas = "abcdefghijklmnopqrstuvwxyz".split("");
+    var maiusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    var numeros = "0123456789".split("");
+    var especiais = ["!", "@", "#", "$", "%", "&", "*", "?", ":", ".", ",", "-", "_", "+", "="];
+
+    var temMinuscula = false;
+    var temMaiuscula = false;
+    var temNumero = false;
+    var temEspecial = false;
+
+    // Percorre a senha e marca o que foi encontrado
+    for (var i = 0; i < senha.length; i++) {
+      var caractere = senha[i];
+
+      if (minusculas.includes(caractere)) {
+        temMinuscula = true;
+      } else if (maiusculas.includes(caractere)) {
+        temMaiuscula = true;
+      } else if (numeros.includes(caractere)) {
+        temNumero = true;
+      } else if (especiais.includes(caractere)) {
+        temEspecial = true;
+      }
+    }
+
+    // Vetor com os requisitos que não foram atendidos
+    var faltando = [];
+
+    if (senha.length < 8) {
+      faltando.push("pelo menos 8 caracteres");
+    }
+    if (!temMinuscula) {
+      faltando.push("uma letra minúscula");
+    }
+    if (!temMaiuscula) {
+      faltando.push("uma letra maiúscula");
+    }
+    if (!temNumero) {
+      faltando.push("um número");
+    }
+    if (!temEspecial) {
+      faltando.push("um caractere especial (ex.: ! @ # $ % & * ?)");
+    }
+
+    return faltando;
+  }
+
+  function cadastrar() {
+    // aguardar();
+
+    //Recupere o valor da nova input pelo nome do id
+    // Agora vá para o método fetch logo abaixo
+    var nomeVar = nome_input.value;
+    var emailVar = email_input.value;
+    var senhaVar = senha_input.value;
+    var confirmacaoSenhaVar = confirmacao_senha_input.value
+
+    // Verificando se há algum campo em branco
+    if (
+      nomeVar == "" ||
+      emailVar == "" ||
+      senhaVar == "" ||
+      confirmacaoSenhaVar == "" 
+    ) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML =
+        "(Mensagem de erro para todos os campos em branco)";
+
+      finalizarAguardar();
+      return false;
+    } else {
+      setInterval(sumirMensagem, 5000);
+    }
+
+    // Validando a força da senha antes de cadastrar
+    var problemasSenha = validarSenha(senhaVar);
+
+    if (problemasSenha.length > 0) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML =
+        "Sua senha precisa ter: " + problemasSenha.join(", ") + ".";
+
+      finalizarAguardar();
+      return false;
+    }
+
+    // Conferindo se a confirmação é igual à senha
+    if (senhaVar != confirmacaoSenhaVar) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = "As senhas não correspondem!";
+
+      finalizarAguardar();
+      return false;
+    }
+
+    // Enviando o valor da nova input
+    fetch("/usuarios/cadastrar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        // crie um atributo que recebe o valor recuperado aqui
+        // Agora vá para o arquivo routes/usuario.js
+        nomeServer: nomeVar,
+        emailServer: emailVar,
+        senhaServer: senhaVar
+      }),
+    })
+      .then(function (resposta) {
+        console.log("resposta: ", resposta);
+
+        if (resposta.ok) {
+          cardErro.style.display = "block";
+
+          mensagem_erro.innerHTML =
+            "Cadastro realizado com sucesso! Redirecionando para tela de Login...";
+
+          setTimeout(() => {
+            window.location = "login.html";
+          }, "2000");
+
+          limparFormulario();
+          finalizarAguardar();
+        } else {
+          throw "Houve um erro ao tentar realizar o cadastro!";
+        }
+      })
+      .catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`);
+        finalizarAguardar();
+      });
+
+    return false;
+  }
+
+  function sumirMensagem() {
+    cardErro.style.display = "none";
+  }
+</script>

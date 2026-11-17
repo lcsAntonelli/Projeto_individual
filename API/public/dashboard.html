@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="../js/sessao.js"></script>
+    <script src="../js/alerta.js"></script>
+
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+
+    <title>Sua Dashboard</title>
+</head>
+
+<body onload="validarSessao()">
+    <div class="layout">
+
+        <aside class="sidebar">
+            <nav class="Menu-principal">
+                <ul class="menu">
+                    <img src="assets/imgs/logo.png" alt="">
+                    <li><a href="" class="active">Visão Geral</a></li>
+                    <li><a href="">Eventos</a></li>
+                    <li><a href="">Repertório</a></li>
+                    <li><a href="">Clientes</a></li>
+                    <li><a href="">Financeiro</a></li>
+                    <li><a href="">Configurações</a></li>
+                    <li><a href="login.html" onclick="limparSessao()">Sair</a></li>
+
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <div class="superior">
+                <h1 class="saudacao">Olá, <span id="b_usuario">usuário</span>!</h1>
+                <p>
+                    Aqui está um resumo da sua jornada musical do mês.
+                </p>
+            </div>
+            <div class="area-kpis">
+                <div class="kpi-1">
+                    <div class="kpi-icone">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+
+                    <div class="kpi-conteudo">
+                        <h1 class="kpi-titulo">Eventos Agendados</h1>
+                        <span class="resultado-kpi">08</span>
+                        <p class="kpi-subtitulo">Próximos compromissos</p>
+                    </div>
+
+                    <a href="#" class="kpi-acao">
+                        <i class="fa fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="kpi-2">
+                    <div class="kpi-icone">
+                        <i class="fa fa-money"></i>
+                    </div>
+
+                    <div class="kpi-conteudo">
+                        <h1 class="kpi-titulo">Faturamento (Mês)</h1>
+                        <span class="resultado-kpi">R$ 2450</span>
+                        <p class="kpi-subtitulo"><span style="color: limegreen;">↑ 12%</span> vs.  mês anterior</p>
+                    </div>
+
+                    <a href="#" class="kpi-acao">
+                        <i class="fa fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="kpi-3">
+                    <div class="kpi-icone">
+                       <i class="fa fa-clock-o"></i>
+                    </div>
+
+                    <div class="kpi-conteudo">
+                        <h1 class="kpi-titulo">A receber</h1>
+                        <span class="resultado-kpi">R$ 900</span>
+                        <p class="kpi-subtitulo">Até dia 10/12</p>
+                    </div>
+
+                    <a href="#" class="kpi-acao">
+                        <i class="fa fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="kpi-4">
+                    <div class="kpi-icone">
+                            <i class="fa fa-music"></i>
+                    </div>
+
+                    <div class="kpi-conteudo">
+                        <h1 class="kpi-titulo">Eventos Agendados</h1>
+                        <span class="resultado-kpi">08</span>
+                        <p class="kpi-subtitulo">Próximos compromissos</p>
+                    </div>
+
+                    <a href="#" class="kpi-acao">
+                        <i class="fa fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+
+        </main>
+
+    </div>
+</body>
+
+</html>
