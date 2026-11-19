@@ -7,17 +7,19 @@
 
     <script src="../js/sessao.js"></script>
     <script src="../js/alerta.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7"></script>
 
     <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="icon" href="./assets/imgs/favicon-16x16.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
+
 
     <title>Sua Dashboard</title>
 </head>
 
-<body onload="validarSessao()">
-    <div class="layout">
+<body onload="validarSessao(); carregarKpiMusicas(); carregarGeneros(); carregarGrafico()">
 
+    <div class="layout">
         <aside class="sidebar">
             <nav class="Menu-principal">
                 <ul class="menu">
@@ -57,56 +59,227 @@
                         <i class="fa fa-arrow-right"></i>
                     </a>
                 </div>
-                <div class="kpi-2">
-                    <div class="kpi-icone">
-                        <i class="fa fa-money"></i>
-                    </div>
-
-                    <div class="kpi-conteudo">
-                        <h1 class="kpi-titulo">Faturamento (Mês)</h1>
-                        <span class="resultado-kpi">R$ 2450</span>
-                        <p class="kpi-subtitulo"><span style="color: limegreen;">↑ 12%</span> vs.  mês anterior</p>
-                    </div>
-
-                    <a href="#" class="kpi-acao">
-                        <i class="fa fa-arrow-right"></i>
-                    </a>
-                </div>
                 <div class="kpi-3">
                     <div class="kpi-icone">
-                       <i class="fa fa-clock-o"></i>
+                        <i class="fa fa-music"></i>
                     </div>
 
                     <div class="kpi-conteudo">
-                        <h1 class="kpi-titulo">A receber</h1>
-                        <span class="resultado-kpi">R$ 900</span>
-                        <p class="kpi-subtitulo">Até dia 10/12</p>
+                        <h1 class="kpi-titulo">Músicas Listadas</h1>
+                        <!-- id novo: vai servir para mostrar a contagem do banco -->
+                        <span class="resultado-kpi" id="kpi_musicas">--</span>
+                        <p class="kpi-subtitulo">Adicionar</p>
                     </div>
 
-                    <a href="#" class="kpi-acao">
-                        <i class="fa fa-arrow-right"></i>
+                    <!-- onclick abre o formulário; "return false" impede a página de pular para o topo -->
+                    <a href="#" class="kpi-acao" onclick="abrirModalMusica(); return false;">
+                        <i class="fa fa-plus"></i>
                     </a>
                 </div>
-                <div class="kpi-4">
-                    <div class="kpi-icone">
-                            <i class="fa fa-music"></i>
-                    </div>
+            </div>
 
-                    <div class="kpi-conteudo">
-                        <h1 class="kpi-titulo">Eventos Agendados</h1>
-                        <span class="resultado-kpi">08</span>
-                        <p class="kpi-subtitulo">Próximos compromissos</p>
-                    </div>
-
-                    <a href="#" class="kpi-acao">
-                        <i class="fa fa-arrow-right"></i>
-                    </a>
+            <div class="area-grafico">
+                <h2 class="grafico-titulo">Músicas por gênero</h2>
+                <div class="grafico-caixa">
+                    <canvas id="grafico_generos"></canvas>
                 </div>
             </div>
 
         </main>
 
     </div>
+
+    <div class="modal-fundo" id="modal_musica">
+        <div class="modal-caixa">
+            <h2>Adicionar música</h2>
+
+            <label for="nome_musica_input">Nome da música</label>
+            <input type="text" id="nome_musica_input" maxlength="300" placeholder="Ex.: Grande é o Senhor">
+
+            <label for="nome_autor_input">Autor/Compositor</label>
+            <input type="text" id="nome_autor_input" maxlength="300" placeholder="Ex.: Marco Frisina">
+
+            <label for="genero_select">Gênero</label>
+            <select id="genero_select">
+                <option value="" selected disabled>Selecione o gênero</option>
+            </select>
+
+            <div class="modal-mensagem" id="mensagem_musica"></div>
+
+            <div class="modal-botoes">
+                <button type="button" class="btn-cancelar" onclick="fecharModalMusica()">Cancelar</button>
+                <button type="button" class="btn-salvar" onclick="salvarMusica()">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var modalMusica = document.getElementById("modal_musica");
+
+        function carregarKpiMusicas() {
+            var idUsuario = sessionStorage.ID_USUARIO;
+
+            fetch("/musicas/total/" + idUsuario)
+                .then(function (resposta) {
+                    if (!resposta.ok) {
+                        throw "Erro ao buscar o total (status " + resposta.status + ")";
+                    }
+                    return resposta.json();
+                })
+                .then(function (dados) {
+
+                    kpi_musicas.innerHTML = String(dados.total).padStart(2, "0");
+                })
+                .catch(function (erro) {
+                    console.log("#ERRO na KPI de músicas: " + erro);
+                });
+        }
+
+        function carregarGeneros() {
+            fetch("/musicas/generos")
+                .then(function (resposta) {
+                    if (!resposta.ok) {
+                        throw "Erro ao buscar os gêneros (status " + resposta.status + ")";
+                    }
+                    return resposta.json();
+                })
+                .then(function (generos) {
+                    var select = document.getElementById("genero_select");
+
+                    while (select.options.length > 1) {
+                        select.remove(1);
+                    }
+
+                    generos.forEach(function (genero) {
+                        var opcao = document.createElement("option");
+                        opcao.value = genero.id;
+                        opcao.textContent = genero.tipo;
+                        select.appendChild(opcao);
+                    });
+                })
+                .catch(function (erro) {
+                    console.log("#ERRO nos gêneros: " + erro);
+                    mostrarMensagemMusica("Não foi possível carregar os gêneros.", "erro");
+                });
+        }
+
+        var graficoGeneros = null
+
+        function carregarGrafico() {
+            var idUsuario = sessionStorage.ID_USUARIO;
+
+            fetch("/musicas/por-genero/" + idUsuario)
+                .then(function (resposta) {
+                    if (!resposta.ok) {
+                        throw "Erro ao buscar o gráfico (status " + resposta.status + ")";
+                    }
+                    return resposta.json();
+                })
+                .then(function (dados) {
+                    var rotulos = dados.map(function (item) { return item.genero; });
+                    var valores = dados.map(function (item) { return item.total; });
+
+                    // se o gráfico já existe, só troca os dados e atualiza
+                    if (graficoGeneros) {
+                        graficoGeneros.data.labels = rotulos;
+                        graficoGeneros.data.datasets[0].data = valores;
+                        graficoGeneros.update();
+                        return;
+                    }
+
+                    Chart.defaults.color = "#f4d7ae";
+                    Chart.defaults.borderColor = "rgba(244, 215, 174, 0.15)";
+
+                    graficoGeneros = new Chart(document.getElementById("grafico_generos"), {
+                        type: "bar",
+                        data: {
+                            labels: rotulos,
+                            datasets: [{
+                                label: "Músicas",
+                                data: valores,
+                                backgroundColor: "#8b7659",
+                                borderRadius: 6,
+                                maxBarThickness: 200
+                            }]
+                        },
+                        options: {
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                y: { beginAtZero: true, ticks: { precision: 0 } }   // só números inteiros
+                            }
+                        }
+                    });
+                })
+                .catch(function (erro) {
+                    console.log("#ERRO no gráfico: " + erro);
+                });
+        }
+
+        function abrirModalMusica() {
+            modalMusica.classList.add("aberto");
+            nome_musica_input.focus();
+        }
+
+        function fecharModalMusica() {
+            modalMusica.classList.remove("aberto");
+            nome_musica_input.value = "";
+            nome_autor_input.value = "";
+            genero_select.value = "";
+            mostrarMensagemMusica("", "");
+        }
+
+        function mostrarMensagemMusica(texto, tipo) {
+            var div = document.getElementById("mensagem_musica");
+            div.innerHTML = texto;
+            div.className = "modal-mensagem " + tipo;
+        }
+
+        function salvarMusica() {
+            var nome = nome_musica_input.value.trim();
+            var autor = nome_autor_input.value.trim();
+            var idGenero = genero_select.value;
+            var idUsuario = sessionStorage.ID_USUARIO;
+
+            if (nome == "" || idGenero == "") {
+                mostrarMensagemMusica("Preencha o nome da música e escolha um gênero.", "erro");
+                return;
+            }
+
+            fetch("/musicas/cadastrar", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    nomeServer: nome,
+                    autorServer: autor,
+                    idGeneroServer: idGenero,
+                    idUsuarioServer: idUsuario
+                })
+            })
+                .then(function (resposta) {
+                    if (resposta.ok) {
+                        mostrarMensagemMusica("Música cadastrada com sucesso!", "sucesso");
+                        carregarKpiMusicas();
+                        carregarGrafico();
+                        setTimeout(fecharModalMusica, 1200);
+                    } else {
+                        throw "Erro ao cadastrar (status " + resposta.status + ")";
+                    }
+                })
+                .catch(function (erro) {
+                    console.log("#ERRO: " + erro);
+                    mostrarMensagemMusica("Não foi possível salvar a música.", "erro");
+                });
+        }
+
+        // fecha ao clicar no fundo escuro (fora da caixa) ou apertar Esc
+        modalMusica.addEventListener("click", function (e) {
+            if (e.target === modalMusica) { fecharModalMusica(); }
+        });
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") { fecharModalMusica(); }
+        });
+    </script>
 </body>
 
 </html>
