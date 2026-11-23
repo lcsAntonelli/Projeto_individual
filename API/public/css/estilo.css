@@ -144,7 +144,7 @@ hr {
 .historia-link {
     text-decoration: none;
     font-size: 13px;
-    color: #EEE7DCCC;
+    color: #8b7659;
     letter-spacing: 1px;
 }
 
@@ -321,7 +321,7 @@ hr {
 
 .texto-idade {
     text-transform: uppercase;
-    font-size: 10px;
+    font-size: 12px;
     color: #53564e;
     margin-left: 20px;
     align-items: center;
@@ -608,7 +608,7 @@ hr {
     text-decoration: none;
     color: #8b7659;
     text-transform: uppercase;
-    font-size: 9px;
+    font-size: 10px;
 }
 
 .footer .container {

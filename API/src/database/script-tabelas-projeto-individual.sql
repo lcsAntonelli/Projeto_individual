@@ -89,3 +89,5 @@ INSERT INTO genero (tipo) VALUES
 ('Romântico'),
 ('Mariana');
 select * from genero;
+
+SELECT * FROM usuario;
